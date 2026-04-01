@@ -1,6 +1,6 @@
 const API_URL = "https://learn.zone01oujda.ma/api/graphql-engine/v1/graphql";
 
-const GET_FULL_PROFILE = `
+export const GET_FULL_PROFILE = `
 query GetFullProfile {
   user {
     login
@@ -15,6 +15,13 @@ query GetFullProfile {
         labelName
       }
     }
+    
+    audits_aggregate(where: {grade: {_is_null: false}}) {
+      aggregate {
+        count
+      }
+    }
+   
   }
   
   xp: transaction_aggregate(where: { type: { _eq: "xp" }, event: { object: { name: { _eq: "Module" } } } }) {
@@ -34,7 +41,7 @@ query GetFullProfile {
   }
   
   projects: transaction(
-    where: {type: {_eq: "xp"}, eventId: {_eq: 41}, path: {_nilike: "%checkpoint%"}}
+    where: {type: {_eq: "xp"}, eventId: {_eq: 41}}
     order_by: {createdAt: desc}
   ) {
     amount
@@ -57,7 +64,6 @@ query GetFullProfile {
   }
 }
 `;
-
 export async function fetchAllData() {
   const token = localStorage.getItem("jwt");
 
