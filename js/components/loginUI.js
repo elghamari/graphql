@@ -25,14 +25,6 @@ export const FormLogin = `
                     </div>
                 </div>
 
-                <div class="options-group">
-                    <label class="remember-label">
-                        <input type="checkbox" id="remember">
-                        <span class="custom-checkbox"></span>
-                        Remember me
-                    </label>
-                </div>
-
                 <button type="submit" class="submit-btn">SIGN IN</button>
                 
                 <p id="error-message" class="error-text"></p>
