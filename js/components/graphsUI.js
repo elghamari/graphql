@@ -13,40 +13,39 @@ export function renderSkillsGraph(skills) {
   const skillEntries = Object.entries(skillMap).sort((a, b) => b[1] - a[1]);
   const totalSkills = skillEntries.length;
 
-  const isMobile = window.innerWidth <= 768;
-  const width = isMobile ? 380 : 800;
-  const startX = isMobile ? 85 : 120;
-  const barHeight = isMobile ? 14 : 12;
-  const gap = isMobile ? 28 : 24;
-
-  const barMaxWidth = width - startX - (isMobile ? 35 : 40);
+  const barHeight = 14; 
+  const gap = 24;
 
   const svgRows = skillEntries
     .map(([name, amount], index) => {
-      const y = index * (barHeight + gap) + 10;
-      const barWidth = (amount / 100) * barMaxWidth;
-
+      const y = index * (barHeight + gap) + 15;
       const hue = (index / totalSkills) * 360;
       const color = `hsl(${hue}, 70%, 55%)`;
 
       return `
             <g class="skill-row">
-                <text x="0" y="${y + barHeight / 2}" class="skill-label" dominant-baseline="middle">${name}</text>
-                <rect x="${startX}" y="${y}" width="${barMaxWidth}" height="${barHeight}" rx="${barHeight / 2}" class="bar-bg" />
-                <rect x="${startX}" y="${y}" width="${barWidth}" height="${barHeight}" rx="${barHeight / 2}" style="fill: ${color}" class="bar-fill" />
-                <text x="${width}" y="${y + barHeight / 2}" class="skill-value" text-anchor="end" dominant-baseline="middle">${amount}</text>
+                <text x="0" y="${y + barHeight / 2}" fill="#f8fafc" font-size="14px" font-weight="600" dominant-baseline="middle">${name}</text>
+                
+                <rect x="95" y="${y}" height="${barHeight}" rx="${barHeight / 2}" fill="#334155" style="width: calc(100% - 135px);" />
+                
+                <rect x="95" y="${y}" height="${barHeight}" rx="${barHeight / 2}" fill="${color}" style="width: calc((100% - 135px) * ${amount / 100});" class="bar-fill" />
+                
+                <text x="100%" y="${y + barHeight / 2}" fill="#f8fafc" font-size="14px" font-weight="600" text-anchor="end" dominant-baseline="middle">${amount}</text>
             </g>
         `;
     })
     .join("");
 
-  const totalHeight = totalSkills * (barHeight + gap) + 20;
+  const totalHeight = totalSkills * (barHeight + gap) + 30;
 
   return `
         <div class="skills-card">
-            <h2 class="section-title">Skill Levels</h2>
-            <div class="svg-container">
-                <svg viewBox="0 0 ${width} ${totalHeight}" width="100%" height="100%">
+            <div class="audit-header" style="margin-bottom: 2rem;">
+                <div class="blue-accent"></div>
+                <h2 class="audit-title">Skill Levels</h2>
+            </div>
+            <div class="svg-container" style="max-height: 350px; overflow-y: auto; overflow-x: hidden; padding-right: 1rem;">
+                <svg width="100%" height="${totalHeight}" style="display: block;">
                     ${svgRows}
                 </svg>
             </div>
